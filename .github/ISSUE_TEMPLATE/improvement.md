@@ -13,6 +13,7 @@ Which part should be improved?
 - SKILL.md
 - Templates
 - Debug workflow
+- Privacy guidance
 - Installation docs
 - Other
 

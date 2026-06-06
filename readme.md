@@ -17,9 +17,9 @@ AI 辅助开发经常会遇到这些情况：
 
 ## 核心能力
 
-- 记忆优先：开始开发前读取已有 feature 记忆，避免重复实现和重复排查。
+- 记忆优先：适用任务开始前读取已有 feature 记忆，避免重复实现和重复排查。
 - 事实与假设分离：已验证事实、待确认问题和调试假设分别记录，避免把猜测写成结论。
-- 持续同步：设计变更、代码实现、Bug 修复、架构调整后同步更新记忆文档。
+- 按需同步：当目标、设计、状态、风险、交接信息或 debug 结论变化时更新记忆文档。
 - 快速交接：新的 Agent 可以通过 `handoff.md`、`progress.md`、`design.md` 在短时间内恢复状态。
 - Debug 收敛：复杂问题使用独立 Bug 目录记录假设、验证、日志和最新结论。
 
@@ -33,10 +33,12 @@ AI 辅助开发经常会遇到这些情况：
 │   ├── SKILL.md
 │   └── references/
 │       ├── debug-workflow.md
+│       ├── privacy.md
 │       ├── readme.md
 │       └── templates.md
 ├── CHANGELOG.md
 ├── LICENSE
+├── PRIVACY.md
 ├── readme.md
 └── readme.en.md
 ```
@@ -44,10 +46,12 @@ AI 辅助开发经常会遇到这些情况：
 - `feature-memory/SKILL.md`：skill 入口文件，包含触发条件、核心原则、目录规范和主流程。
 - `feature-memory/references/templates.md`：项目级、feature 级、Bug 级文档模板。
 - `feature-memory/references/debug-workflow.md`：复杂问题排障流程、`debug.sh` 安全规则和日志迭代协议。
+- `feature-memory/references/privacy.md`：skill 内置隐私、安全边界和脱敏规则。
 - `feature-memory/references/readme.md`：参考资料说明和读取时机。
 - `.github/ISSUE_TEMPLATE/`：GitHub Issue 模板。
 - `CHANGELOG.md`：版本变更记录。
 - `LICENSE`：MIT 开源许可证。
+- `PRIVACY.md`：隐私、脱敏和目标项目 Git 提交建议。
 
 ## 安装方式
 
@@ -63,7 +67,7 @@ git clone https://github.com/changjian1994/feature-memory.git
 
 ## 使用场景
 
-当 Agent 处理以下任务时，适合触发此 skill：
+建议按需启用此 skill，不建议对所有普通编码任务无脑全局启用。当 Agent 处理以下任务时，适合触发：
 
 - 实现或继续一个多步骤 feature。
 - 恢复之前中断的开发上下文。
@@ -71,6 +75,8 @@ git clone https://github.com/changjian1994/feature-memory.git
 - 跟踪设计、进度、决策或风险。
 - 排查复杂 Bug、测试失败、线上异常或偶现问题。
 - 多轮 debug 后需要收敛证据和下一步验证动作。
+
+对于一次性小修改、格式调整、简单重命名或无需保留上下文的低风险任务，通常不需要创建或更新记忆文档。
 
 ## 在目标项目中生成的记忆结构
 
@@ -94,7 +100,7 @@ feature-memory/
         └── BUG-YYYYMMDD-XXX-description/
 ```
 
-注意：目标项目里的 `feature-memory/` 只用于保存开发记忆，不应存放业务代码、测试文件、构建产物或密钥。
+注意：目标项目里的 `feature-memory/` 只用于保存开发记忆，不应存放业务代码、测试文件、构建产物、密钥、Token、Cookie、个人数据、内部域名、生产日志原文或未脱敏数据库内容。
 
 ## 工作流概览
 
@@ -103,7 +109,7 @@ feature-memory/
 3. 读取 `index.md`、`project/*` 和目标 feature 的关键文档。
 4. 区分已验证事实、假设和待确认问题。
 5. 开始实现、调试、重构或文档更新。
-6. 任务结束前同步更新 `design.md`、`progress.md`、`decision.md`、`handoff.md` 和 `index.md`。
+6. 如果 feature 目标、设计、状态、风险、交接信息或 debug 结论发生变化，任务结束前同步更新相关记忆文档。
 
 ## Debug 约定
 
@@ -126,7 +132,9 @@ feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/
 ## 适用边界
 
 - 适合：长期 feature、复杂调试、多 Agent 交接、上下文恢复、架构决策记录。
-- 不适合：替代正式产品文档、替代测试、存放敏感信息、存放业务代码。
+- 不适合：普通一次性小任务、替代正式产品文档、替代测试、存放敏感信息、存放业务代码。
+- 提交策略：目标项目中的 `feature-memory/` 是否提交到 Git 应由项目决定；公开仓库或包含敏感信息时，建议不提交或先脱敏。
+- 隐私规则：写入任何架构、API、数据库或日志信息前，请先阅读 `PRIVACY.md`。
 
 ## 贡献
 

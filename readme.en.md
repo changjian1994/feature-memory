@@ -17,9 +17,9 @@ AI-assisted development often runs into these problems:
 
 ## Core Capabilities
 
-- Memory first: read existing feature memory before coding to avoid duplicate work and repeated debugging.
+- Memory first: read existing feature memory before applicable tasks to avoid duplicate work and repeated debugging.
 - Facts versus assumptions: keep verified facts, open questions, and debug hypotheses clearly separated.
-- Continuous updates: update memory documents after design changes, implementation work, bug fixes, and architecture adjustments.
+- Scoped updates: update memory documents when goals, design, status, risks, handoff context, or debug conclusions change.
 - Fast handoff: help a new Agent recover context quickly through `handoff.md`, `progress.md`, and `design.md`.
 - Debug convergence: use dedicated Bug directories to track hypotheses, validation steps, logs, and the latest conclusion.
 
@@ -33,10 +33,12 @@ AI-assisted development often runs into these problems:
 │   ├── SKILL.md
 │   └── references/
 │       ├── debug-workflow.md
+│       ├── privacy.md
 │       ├── readme.md
 │       └── templates.md
 ├── CHANGELOG.md
 ├── LICENSE
+├── PRIVACY.md
 ├── readme.md
 └── readme.en.md
 ```
@@ -44,10 +46,12 @@ AI-assisted development often runs into these problems:
 - `feature-memory/SKILL.md`: the skill entry file, including trigger conditions, core principles, directory conventions, and the main workflow.
 - `feature-memory/references/templates.md`: templates for project-level, feature-level, and Bug-level documents.
 - `feature-memory/references/debug-workflow.md`: complex debugging workflow, `debug.sh` safety rules, and log iteration protocol.
+- `feature-memory/references/privacy.md`: built-in privacy, security boundary, and redaction guidance for the skill.
 - `feature-memory/references/readme.md`: reference documentation overview and when to read each file.
 - `.github/ISSUE_TEMPLATE/`: GitHub Issue templates.
 - `CHANGELOG.md`: version history.
 - `LICENSE`: MIT open source license.
+- `PRIVACY.md`: privacy, redaction, and target-project Git commit guidance.
 
 ## Installation
 
@@ -63,7 +67,7 @@ Then copy or symlink the `feature-memory/feature-memory` directory into your Age
 
 ## When To Use
 
-This skill is useful when an Agent is asked to:
+Use this skill on demand. It is not intended to be enabled blindly for every ordinary coding task. It is useful when an Agent is asked to:
 
 - Implement or continue a multi-step feature.
 - Recover development context after an interruption.
@@ -71,6 +75,8 @@ This skill is useful when an Agent is asked to:
 - Track design, progress, decisions, or risks.
 - Investigate complex bugs, test failures, production incidents, or flaky behavior.
 - Converge evidence and next validation steps after multiple debugging rounds.
+
+For one-off small edits, formatting changes, simple renames, or low-risk tasks that do not need persistent context, memory documents are usually unnecessary.
 
 ## Memory Structure In Target Projects
 
@@ -94,7 +100,7 @@ feature-memory/
         └── BUG-YYYYMMDD-XXX-description/
 ```
 
-Note: the target project's `feature-memory/` directory is for development memory only. Do not store business code, tests, build artifacts, or secrets in it.
+Note: the target project's `feature-memory/` directory is for development memory only. Do not store business code, tests, build artifacts, secrets, tokens, cookies, personal data, internal domains, raw production logs, or unsanitized database content in it.
 
 ## Workflow Overview
 
@@ -103,7 +109,7 @@ Note: the target project's `feature-memory/` directory is for development memory
 3. Read `index.md`, `project/*`, and the target feature's key documents.
 4. Separate verified facts, assumptions, and open questions.
 5. Start implementation, debugging, refactoring, or documentation updates.
-6. Before finishing, synchronize `design.md`, `progress.md`, `decision.md`, `handoff.md`, and `index.md`.
+6. Before finishing, update relevant memory documents only when the feature goal, design, status, risk, handoff context, or debug conclusion has changed.
 
 ## Debugging Convention
 
@@ -126,7 +132,9 @@ feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/
 ## Scope
 
 - Good fit: long-running features, complex debugging, multi-Agent handoff, context recovery, and architecture decision records.
-- Not a fit: replacing formal product docs, replacing tests, storing sensitive data, or storing business code.
+- Not a fit: ordinary one-off small tasks, replacing formal product docs, replacing tests, storing sensitive data, or storing business code.
+- Git policy: whether the target project's `feature-memory/` should be committed depends on the project; for public repositories or sensitive content, do not commit it unless reviewed and sanitized.
+- Privacy rules: read `PRIVACY.md` before writing architecture, API, database, or log details.
 
 ## Contributing
 
