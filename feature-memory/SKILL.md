@@ -1,6 +1,6 @@
 ---
 name: feature-memory
-description: 当 Code Agent 处理长期 feature、复杂 Bug、多轮调试、上下文恢复、交接准备、架构决策记录或明确要求维护 feature 记忆时，使用此 skill。此 skill 会把 feature 级记忆保存在 <project-root>/feature-memory/ 中，让设计、进度、debug 上下文与代码保持同步，避免重复工作，并帮助新的 Agent 快速恢复项目状态。对于一次性小修改、格式调整、简单重命名或无需保留上下文的低风险任务，不应主动触发，除非用户明确要求。
+description: 当 Code Agent 处理长期 feature、复杂 Bug、多轮调试、上下文恢复、交接准备、架构决策记录、用户输入 /feature-memory 或明确要求维护 feature 记忆时，使用此 skill。此 skill 会把 feature 级记忆保存在 <project-root>/feature-memory/ 中，让设计、进度、debug 上下文与代码保持同步，避免重复工作，并帮助新的 Agent 快速恢复项目状态。对于一次性小修改、格式调整、简单重命名或无需保留上下文的低风险任务，不应主动触发，除非用户明确要求。
 ---
 
 # Feature Memory Skill
@@ -262,6 +262,75 @@ Bug 目录包含 `readme.md`、`timeline.md`、`conclusion.md`、`debug.sh` 和 
 
 ***
 
+# 交互入口
+
+当用户只输入 `/feature-memory`、`feature-memory`，或表达“打开 feature memory 工作台”时，不要直接开始编码或创建大量文档。先进入交互入口。
+
+如果用户输入 `/feature-momery` 等明显拼写错误，应简短提示正确命令是 `/feature-memory`，并继续进入交互入口。
+
+## 入口问候
+
+使用简短问候并让用户选择下一步：
+
+```text
+你好，我是 feature-memory。
+我可以帮助你恢复已有 feature 上下文，或为新的 feature 建立记忆。
+
+请选择：
+1. 继续已有 feature
+2. 创建新的 feature
+3. 查看当前项目 feature 列表
+4. 退出
+```
+
+## 继续已有 feature
+
+执行步骤：
+
+1. 定位 `<project-root>/feature-memory/`。
+2. 如果目录不存在，说明当前项目还没有 feature 记忆，并询问是否初始化并创建新 feature。
+3. 如果 `feature-memory/index.md` 不存在，读取 `feature-memory/` 下的一级 feature 目录作为候选，并提示 index 缺失。
+4. 优先从 `feature-memory/index.md` 提取 feature 名称、状态、最近更新、负责人、下一步动作和相关文档。
+5. 以编号列表展示 feature，避免一次性展开所有文档内容。
+6. 用户选择 feature 后，读取该 feature 的 `handoff.md`、`progress.md`、`design.md`、`decision.md`。
+7. 汇总当前目标、当前状态、下一步动作、阻塞项、风险和待确认问题。
+
+展示格式示例：
+
+```text
+当前项目已有 feature：
+
+1. payment-callback - IN_PROGRESS - 下一步：实现重试机制
+2. login-timeout-debug - BLOCKED - 下一步：等待日志
+3. user-profile-refactor - DONE
+
+请选择要继续的 feature：
+```
+
+如果没有找到任何 feature，提示用户创建新的 feature。
+
+## 创建新的 feature
+
+执行步骤：
+
+1. 询问 feature 名称、目标和范围。
+2. 将目录名规范化为 kebab-case，例如 `payment-callback`。
+3. 创建或提示创建 `feature-memory/<feature-name>/`。
+4. 按模板初始化 `readme.md`、`design.md`、`progress.md`、`decision.md`、`handoff.md`。
+5. 同步更新 `feature-memory/index.md`，状态默认为 `TODO` 或 `IN_PROGRESS`。
+6. 只记录已确认事实；不确定内容写入“待确认问题”或“假设”。
+7. 写入任何可能敏感的信息前，先遵循 `references/privacy.md`。
+
+## 查看 feature 列表
+
+只展示列表摘要，不主动读取所有 feature 的完整文档。用户选择某个 feature 后，再读取该 feature 的恢复文档。
+
+## 退出
+
+如果用户选择退出，简短确认并停止 feature-memory 流程，不创建或修改任何记忆文件。
+
+***
+
 # Agent 启动流程
 
 接手项目时按顺序执行：
@@ -274,7 +343,7 @@ Bug 目录包含 `readme.md`、`timeline.md`、`conclusion.md`、`debug.sh` 和 
 6. 向用户简短确认当前目标、下一步动作和可能风险。
 7. 开始开发、排障或文档更新。
 
-禁止跳过记忆读取直接开始编码。
+对于适用 feature-memory 的任务，禁止跳过记忆读取直接开始编码。
 
 ***
 

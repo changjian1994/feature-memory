@@ -80,6 +80,31 @@ git clone https://github.com/changjian1994/feature-memory.git
 
 对于一次性小修改、格式调整、简单重命名或无需保留上下文的低风险任务，通常不需要创建或更新记忆文档。
 
+## 交互入口
+
+用户可以只输入：
+
+```text
+/feature-memory
+```
+
+Agent 会先给出简短问候，并让用户选择下一步：
+
+```text
+你好，我是 feature-memory。
+我可以帮助你恢复已有 feature 上下文，或为新的 feature 建立记忆。
+
+请选择：
+1. 继续已有 feature
+2. 创建新的 feature
+3. 查看当前项目 feature 列表
+4. 退出
+```
+
+如果选择继续已有 feature，Agent 会读取目标项目的 `feature-memory/index.md`，列出已有 feature 供用户选择；用户选定后，再读取对应 feature 的 `handoff.md`、`progress.md`、`design.md` 和 `decision.md` 来恢复上下文。
+
+如果选择创建新的 feature，Agent 会询问 feature 名称、目标和范围，并初始化对应的 `feature-memory/<feature-name>/` 记忆目录。
+
 ## 在目标项目中生成的记忆结构
 
 skill 会要求在目标项目根目录维护 `feature-memory/` 目录：

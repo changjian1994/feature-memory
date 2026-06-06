@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.0 - 2026-06-06
+
+### Added
+
+- Added an interactive `/feature-memory` entry flow for choosing whether to continue an existing feature, create a new feature, view the feature list, or exit.
+- Added feature discovery behavior that reads `feature-memory/index.md` and lists existing features before loading detailed context.
+- Added new-feature onboarding guidance for collecting the feature name, goal, and scope before initializing memory files.
+- Documented the interactive entry flow in both Chinese and English README files.
+
 ## 1.0.2 - 2026-06-06
 
 ### Changed

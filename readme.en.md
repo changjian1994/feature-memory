@@ -80,6 +80,31 @@ Use this skill on demand. It is not intended to be enabled blindly for every ord
 
 For one-off small edits, formatting changes, simple renames, or low-risk tasks that do not need persistent context, memory documents are usually unnecessary.
 
+## Interactive Entry
+
+Users can simply type:
+
+```text
+/feature-memory
+```
+
+The Agent will greet the user and ask what to do next:
+
+```text
+Hello, I am feature-memory.
+I can help you recover existing feature context or create memory for a new feature.
+
+Please choose:
+1. Continue an existing feature
+2. Create a new feature
+3. View the current project feature list
+4. Exit
+```
+
+If the user chooses to continue an existing feature, the Agent reads the target project's `feature-memory/index.md` and lists available features. After the user selects one, the Agent reads that feature's `handoff.md`, `progress.md`, `design.md`, and `decision.md` to recover context.
+
+If the user chooses to create a new feature, the Agent asks for the feature name, goal, and scope, then initializes the corresponding `feature-memory/<feature-name>/` memory directory.
+
 ## Memory Structure In Target Projects
 
 The skill asks the Agent to maintain a `feature-memory/` directory at the target project root:
