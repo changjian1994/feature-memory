@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.1 - 2026-06-06
+
+### Changed
+
+- Clarified that `/feature-memory` should prefer host-native interactive pickers, Quick Pick, or question selection components when available.
+- Documented numbered text input as the fallback interaction mode when native picker UI is unavailable.
+
 ## 1.1.0 - 2026-06-06
 
 ### Added

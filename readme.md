@@ -88,7 +88,9 @@ git clone https://github.com/changjian1994/feature-memory.git
 /feature-memory
 ```
 
-Agent 会先给出简短问候，并让用户选择下一步：
+Agent 会先给出简短问候，并让用户选择下一步。
+
+如果宿主 Agent 支持原生选择器、Quick Pick 或问题选择组件，会优先使用交互式选择器；如果不支持，则退化为编号文本输入：
 
 ```text
 你好，我是 feature-memory。

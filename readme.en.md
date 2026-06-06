@@ -88,7 +88,9 @@ Users can simply type:
 /feature-memory
 ```
 
-The Agent will greet the user and ask what to do next:
+The Agent will greet the user and ask what to do next.
+
+If the host Agent supports native pickers, Quick Pick, or question selection components, it should prefer that interactive UI. If not, it falls back to numbered text input:
 
 ```text
 Hello, I am feature-memory.
