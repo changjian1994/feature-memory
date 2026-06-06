@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.2 - 2026-06-06
+
+### Changed
+
+- Improved the README value proposition to clarify that `feature-memory` is a context memory workflow for Code Agents, not just a documentation template.
+- Added clearer Chinese and English project taglines for traceable, recoverable, and handoff-friendly feature context.
+
 ## 1.0.1 - 2026-06-06
 
 ### Changed

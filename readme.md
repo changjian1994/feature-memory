@@ -1,5 +1,7 @@
 # Feature Memory Skill
 
+让 AI 辅助开发中的 feature 上下文可追溯、可恢复、可交接。
+
 一个面向 Code Agent 的 feature 级记忆 skill，用于在多轮开发、调试、交接和恢复上下文时，把关键设计、进度、决策和排障过程持久化到项目中，减少重复工作和上下文丢失。
 
 适用于支持 Markdown-based Skill 或目录型 skill 包的 Code Agent / IDE Agent。
@@ -13,7 +15,7 @@ AI 辅助开发经常会遇到这些情况：
 - Bug 排查经过多轮假设和验证后，历史证据散落在对话中。
 - 多个 Agent 协作时，无法快速确认“已完成什么、还差什么、为什么这么做”。
 
-`feature-memory` 的目标是把一个 feature 的开发过程沉淀为可追溯、可恢复、可交接的项目内文档。
+`feature-memory` 不是普通文档模板，而是一套给 Code Agent 使用的上下文记忆工作流。它帮助研发团队把长期 feature、复杂 debug 和交接恢复过程沉淀到项目内，让新的 Agent 或同事可以快速理解当前状态，继续推进而不是从头再来。
 
 ## 核心能力
 

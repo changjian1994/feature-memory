@@ -1,5 +1,7 @@
 # Feature Memory Skill
 
+Make feature context in AI-assisted development traceable, recoverable, and easy to hand off.
+
 A feature-level memory skill for Code Agents. It helps persist design decisions, progress, handoff context, and debugging evidence inside the project during multi-step development, debugging, and context recovery.
 
 It is intended for Code Agents / IDE Agents that support Markdown-based skills or directory-based skill packages.
@@ -13,7 +15,7 @@ AI-assisted development often runs into these problems:
 - Debugging evidence is scattered across multiple conversation turns.
 - Multiple Agents cannot quickly tell what is done, what remains, and why decisions were made.
 
-`feature-memory` turns a feature's development process into project-local documentation that is traceable, recoverable, and easy to hand off.
+`feature-memory` is not just a documentation template. It is a context memory workflow for Code Agents, helping engineering teams capture long-running features, complex debugging, and handoff recovery inside the project so the next Agent or teammate can continue from the current state instead of starting over.
 
 ## Core Capabilities
 
