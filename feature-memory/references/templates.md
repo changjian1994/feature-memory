@@ -190,3 +190,84 @@ IN_PROGRESS
 ## Bug 文档
 
 详细 Bug debug 流程和调试脚本规则见 `debug-workflow.md`。
+
+### feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/readme.md
+
+```md
+# BUG-YYYYMMDD-XXX-description
+
+## 问题
+
+## 影响范围
+
+## 复现步骤
+
+## 预期结果
+
+## 实际结果
+
+## 待确认问题
+```
+
+### feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/timeline.md
+
+```md
+# Debug Timeline
+
+## 第 1 轮
+
+### 假设
+
+### 验证方式
+
+### 结果
+
+已确认 | 已排除 | 暂无结论
+
+### 证据
+
+### 下一步
+```
+
+### feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/conclusion.md
+
+```md
+# Debug Conclusion
+
+## 当前发现
+
+## 已确认事实
+
+## 已排除假设
+
+## 剩余假设
+
+## 下一步验证
+
+## 待确认问题
+```
+
+### feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/debug.sh
+
+```sh
+#!/usr/bin/env sh
+set -eu
+
+# 只放只读诊断命令。不得输出密钥、Token、Cookie 或个人敏感信息。
+mkdir -p output
+
+LOG_FILE="output/v1.log"
+
+{
+  echo "Debug log: ${LOG_FILE}"
+  echo "Generated at: $(date)"
+  echo
+
+  # TODO: 在这里填写只读诊断命令。
+  # 示例：
+  # echo "Current branch:"
+  # git branch --show-current
+} > "${LOG_FILE}" 2>&1
+
+echo "Debug output written to ${LOG_FILE}"
+```

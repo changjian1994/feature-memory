@@ -153,10 +153,15 @@ feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/
 └── output/
 ```
 
+- When the user mentions debugging, investigation, log analysis, test failures, production incidents, flaky issues, or provides `output/vN.log`, error stacks, or alarms, the Agent should enter the debug memory workflow.
+- On the first debugging round for a Bug, the Agent should create the Bug directory and initialize `readme.md`, `timeline.md`, `conclusion.md`, `debug.sh`, and `output/`.
+- Complex debugging should not be recorded only in the feature-level `progress.md`.
+- `debug.sh` is a one-command diagnostic script. Each round should automatically generate the next versioned log file, such as `output/v1.log`, `output/v2.log`, or `output/v3.log`.
+- The user only needs to run `./debug.sh`, then send the generated `output/vN.log` content back to the Agent unchanged.
 - `timeline.md` is append-only and preserves the investigation history.
 - `conclusion.md` keeps only the latest conclusion and clearly separates confirmed facts, excluded hypotheses, and remaining hypotheses.
 - `debug.sh` should default to read-only diagnostic commands; writing, deleting, migrating, restarting services, or modifying databases requires confirmation first.
-- `output/` stores diagnostic outputs from each round so the Agent can continue converging from logs.
+- `output/` stores diagnostic outputs from each round so the Agent can continue converging from logs; old logs must not be overwritten.
 
 ## Scope
 

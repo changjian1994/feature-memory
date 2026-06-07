@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.2 - 2026-06-07
+
+### Changed
+
+- Strengthened debug trigger rules for debugging, log analysis, test failures, production incidents, flaky issues, and multi-round investigations.
+- Clarified that complex debugging must create or maintain `feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/`.
+- Added explicit debug initialization steps for `readme.md`, `timeline.md`, `conclusion.md`, `debug.sh`, and `output/`.
+- Added a one-command debug loop where `debug.sh` writes versioned logs such as `output/v1.log`, `output/v2.log`, and `output/v3.log`.
+- Clarified that users can run `./debug.sh` and paste the generated `output/vN.log` content back unchanged for the next analysis round.
+- Added Bug-level document templates and README guidance to avoid recording complex debugging only in feature-level `progress.md`.
+
 ## 1.1.1 - 2026-06-06
 
 ### Changed

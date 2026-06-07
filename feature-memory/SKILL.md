@@ -1,6 +1,6 @@
 ---
 name: feature-memory
-description: 当 Code Agent 处理长期 feature、复杂 Bug、多轮调试、上下文恢复、交接准备、架构决策记录、用户输入 /feature-memory 或明确要求维护 feature 记忆时，使用此 skill。此 skill 会把 feature 级记忆保存在 <project-root>/feature-memory/ 中，让设计、进度、debug 上下文与代码保持同步，避免重复工作，并帮助新的 Agent 快速恢复项目状态。对于一次性小修改、格式调整、简单重命名或无需保留上下文的低风险任务，不应主动触发，除非用户明确要求。
+description: 当 Code Agent 处理长期 feature、复杂 Bug、多轮调试、日志分析、测试失败、线上异常、上下文恢复、交接准备、架构决策记录、用户输入 /feature-memory 或明确要求维护 feature 记忆时，使用此 skill。此 skill 会把 feature 级记忆保存在 <project-root>/feature-memory/ 中，让设计、进度、debug 上下文与代码保持同步，避免重复工作，并帮助新的 Agent 快速恢复项目状态。遇到复杂 Bug、多轮排障、日志分析、测试失败或线上异常时，应在 <project-root>/feature-memory/<feature-name>/debug/ 下创建或维护独立 Bug 目录。对于一次性小修改、格式调整、简单重命名或无需保留上下文的低风险任务，不应主动触发，除非用户明确要求。
 ---
 
 # Feature Memory Skill
@@ -230,7 +230,25 @@ feature 基础信息。记录目标、范围、依赖、约束、注意事项和
 
 # Debug 流程
 
-复杂问题必须建立独立 Bug 目录，命名为 `BUG-YYYYMMDD-XXX-description`。详细 debug 流程、文档模板、`debug.sh` 安全边界和日志交互协议见 `references/debug-workflow.md`。
+当任务出现以下任一信号时，必须进入 debug 记忆流程，而不是只在普通 `progress.md` 中记录：
+
+- 用户明确说“debug”“排查”“看日志”“分析日志”“测试失败”“线上异常”“偶现”“复现不了”“继续收敛”。
+- 同一问题需要两轮及以上假设、验证或日志分析。
+- 已经有 `output/vN.log`、错误堆栈、测试失败输出、报警信息或诊断命令输出。
+- 问题原因尚未确认，需要保留已确认事实、已排除假设和下一步验证。
+
+进入 debug 记忆流程后：
+
+1. 先定位或确认目标 feature；不确定时向用户确认，或创建临时 feature 目录名。
+2. 在 `feature-memory/<feature-name>/debug/` 下创建独立 Bug 目录，命名为 `BUG-YYYYMMDD-XXX-description`。
+3. 初始化 `readme.md`、`timeline.md`、`conclusion.md`、`debug.sh` 和 `output/`。
+4. 第一轮就必须写入问题定义、初始假设、验证方式，并生成一键执行的 `debug.sh`。
+5. `debug.sh` 必须自动把本轮诊断输出写入下一个版本化日志文件，例如 `output/v1.log`、`output/v2.log`、`output/v3.log`。
+6. 每轮用户执行 `debug.sh` 后，只需把生成的 `output/vN.log` 内容原样粘贴回来，或告知日志文件路径。
+7. 每轮用户提供日志或输出后，必须追加 `timeline.md`，更新 `conclusion.md`，并重写 `debug.sh` 指向下一轮 `output/vN+1.log`。
+8. 不得把复杂排障只写入 feature 级 `progress.md` 后结束。
+
+详细 debug 流程、文档模板、`debug.sh` 安全边界和日志交互协议见 `references/debug-workflow.md`。
 
 ***
 
@@ -248,17 +266,17 @@ Bug 目录包含 `readme.md`、`timeline.md`、`conclusion.md`、`debug.sh` 和 
 
 ***
 
-`debug.sh` 用于生成下一轮分析所需数据。默认只生成只读诊断命令；涉及写入、删除、迁移、重启服务、修改数据库的命令必须先征得用户确认。
+`debug.sh` 是一键诊断脚本，用于生成下一轮分析所需数据。默认只生成只读诊断命令，并将输出自动写入下一个 `output/vN.log`；涉及写入、删除、迁移、重启服务、修改数据库的命令必须先征得用户确认。
 
 ***
 
-`output/` 保存调试输出，例如 `v1.log`、`v2.log`、`v3.log`。
+`output/` 保存版本化调试输出，例如 `v1.log`、`v2.log`、`v3.log`。每一轮 `debug.sh` 必须写入新的日志文件，禁止覆盖旧日志。
 
 ***
 
 # 排障交互协议
 
-当用户提供 `output/vN.log` 时，分析最新日志，更新 `conclusion.md`、追加 `timeline.md`、更新 `debug.sh`，然后告知用户已确认、已排除、当前怀疑和下一步验证命令。完整响应模板见 `references/debug-workflow.md`。
+当用户提供 `output/vN.log` 时，分析最新日志，更新 `conclusion.md`、追加 `timeline.md`、更新 `debug.sh` 让它生成 `output/vN+1.log`，然后告知用户已确认、已排除、当前怀疑和下一步执行命令。完整响应模板见 `references/debug-workflow.md`。
 
 ***
 

@@ -153,10 +153,15 @@ feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/
 └── output/
 ```
 
+- 当用户提到 debug、排查、看日志、测试失败、线上异常、偶现问题，或提供 `output/vN.log`、错误堆栈、报警信息时，Agent 应进入 debug 记忆流程。
+- 首次进入某个 Bug 的 debug 流程时，Agent 应创建 Bug 目录并初始化 `readme.md`、`timeline.md`、`conclusion.md`、`debug.sh` 和 `output/`。
+- 不应把复杂排障只记录在 feature 级 `progress.md` 中。
+- `debug.sh` 是一键诊断脚本，每轮应自动生成下一个版本化日志文件，例如 `output/v1.log`、`output/v2.log`、`output/v3.log`。
+- 用户只需要执行 `./debug.sh`，然后把生成的 `output/vN.log` 内容原样发回给 Agent。
 - `timeline.md` 只追加，不覆盖历史排查过程。
 - `conclusion.md` 只保留当前最新结论，并明确已确认事实、已排除假设和剩余假设。
 - `debug.sh` 默认只包含只读诊断命令；写入、删除、迁移、重启服务或修改数据库前必须先确认。
-- `output/` 保存每轮诊断输出，便于 Agent 基于日志继续收敛。
+- `output/` 保存每轮诊断输出，便于 Agent 基于日志继续收敛；旧日志不得被覆盖。
 
 ## 适用边界
 
