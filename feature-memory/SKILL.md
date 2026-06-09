@@ -78,7 +78,45 @@ feature-memory/
 
 ***
 
-## 原则 2：区分事实与假设
+## 原则 2：明确边界与关系
+
+创建或继续 feature 前，必须检查 `index.md` 中是否已有类似、交叉或包含关系的 feature：
+
+### 关系类型
+
+- **父子关系**：一个 feature 是另一个 feature 的子任务（如 `user-profile` 包含 `user-profile-avatar-upload`）
+- **依赖关系**：一个 feature 依赖另一个 feature 的完成（如 `order-checkout` 依赖 `payment-gateway`）
+- **交叉关系**：两个 feature 共享部分实现或数据（如 `cart` 和 `wishlist` 都访问商品数据）
+- **重复关系**：两个 feature 目标相同或高度重叠
+
+### 处理策略
+
+遵循「尽可能不增加重复目录，但不让一个 feature 臃肿」原则：
+
+1. **检测重叠**：创建新 feature 前，检查名称、目标、范围是否与现有 feature 重叠超过 60%
+2. **优先合并**：如果高度重叠（>60%），优先建议用户合并到已有 feature，而不是新建
+3. **独立拆分**：如果只是部分重叠或涉及不同模块，创建独立的小 feature，保持低耦合
+4. **建立关系**：如果是父子或依赖关系，在 `index.md` 和 feature `readme.md` 中明确记录
+5. **明确边界**：每个 feature 必须在 `readme.md` 中定义"包含什么"和"不包含什么"
+6. **聚合导航**：当新建一个大 feature 时，如果发现现有多个 feature 可以作为它的子集，创建聚合 feature 目录，通过索引树结构导航到子 feature
+
+### 聚合导航机制
+
+当需要创建一个大的聚合 feature（如 `user-profile`），而现有 `user-profile-avatar-upload`、`user-profile-settings` 等可以作为其子 feature 时：
+
+1. 创建聚合 feature 目录 `feature-memory/user-profile/`
+2. 在聚合 feature 的 `readme.md` 中列出子 feature 索引
+3. 在 `index.md` 中为子 feature 设置父 feature 为聚合 feature
+4. 子 feature 的实际文档仍保留在各自独立目录中，不重复存储
+5. 聚合 feature 可以包含跨子 feature 的总体设计和协调信息
+
+### 关系记录格式
+
+在 `index.md` 中使用"父 feature"和"依赖"列记录关系。
+
+***
+
+## 原则 3：区分事实与假设
 
 所有记录必须区分：
 
@@ -112,7 +150,7 @@ Redis 已启用
 
 ***
 
-## 原则 3：持续更新
+## 原则 4：持续更新
 
 以下动作影响 feature 目标、设计、状态、风险、交接信息或 debug 结论时，应同步更新相关文档：
 
@@ -126,7 +164,7 @@ Redis 已启用
 
 ***
 
-## 原则 4：随时可交接
+## 原则 5：随时可交接
 
 任何时刻，新的 Agent 接手项目时，都应该能够通过文档在 5 分钟内恢复工作状态。
 

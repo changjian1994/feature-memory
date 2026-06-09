@@ -163,6 +163,44 @@ feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/
 - `debug.sh` should default to read-only diagnostic commands; writing, deleting, migrating, restarting services, or modifying databases requires confirmation first.
 - `output/` stores diagnostic outputs from each round so the Agent can continue converging from logs; old logs must not be overwritten.
 
+## Feature Relationship Management
+
+When encountering similar, overlapping, parent-child, or cross-cutting features, the skill automatically detects and suggests appropriate handling:
+
+### Relationship Types
+
+- **Parent-child**: One feature is a sub-task of another (e.g., `user-profile-avatar-upload` is part of `user-profile`)
+- **Dependency**: One feature depends on another being completed (e.g., `order-checkout` depends on `payment-gateway`)
+- **Cross-cutting**: Two features share partial implementation or data (e.g., both `cart` and `wishlist` access product data)
+- **Duplicate**: Two features have identical or highly overlapping goals
+
+### Handling Strategy
+
+Following the principle: "Avoid duplicate directories where possible, but don't let a single feature become bloated":
+
+1. **Detect Overlap**: Before creating a new feature, check if name, goal, and scope overlap >60% with existing features
+2. **Prefer Merge**: If highly overlapping (>60%), suggest merging into an existing feature rather than creating a new one
+3. **Independent Split**: If only partially overlapping or involving different modules, create independent small features with low coupling
+4. **Establish Relationships**: Record parent-child or dependency relationships in `index.md` and feature `readme.md`
+5. **Define Boundaries**: Each feature must define "what is included" and "what is excluded"
+6. **Aggregate Navigation**: When creating a large feature, if existing features can serve as its subsets, create an aggregate feature directory with an index tree structure linking to child features
+
+### Aggregate Navigation
+
+When creating a large aggregate feature (e.g., `user-profile`) and existing features like `user-profile-avatar-upload`, `user-profile-settings` can serve as its children:
+
+- Create aggregate feature directory: `feature-memory/user-profile/`
+- List child feature index tree in the aggregate feature's `readme.md`
+- Set parent feature for child features in `index.md`
+- Keep child feature documents in their own directories (no duplication)
+- Aggregate feature can contain cross-child-feature design and coordination
+
+### Boundary Definition
+
+Each feature's `readme.md` should include:
+- **Includes**: Feature scope, core deliverables, key interfaces/modules
+- **Excludes**: Out-of-scope functionality, parts handled by other features, explicitly excluded boundaries
+
 ## Scope
 
 - Good fit: long-running features, complex debugging, multi-Agent handoff, context recovery, and architecture decision records.

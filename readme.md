@@ -163,6 +163,44 @@ feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/
 - `debug.sh` 默认只包含只读诊断命令；写入、删除、迁移、重启服务或修改数据库前必须先确认。
 - `output/` 保存每轮诊断输出，便于 Agent 基于日志继续收敛；旧日志不得被覆盖。
 
+## Feature 关系管理
+
+当遇到类似、交叉或父子包含关系的 feature 时，skill 会自动检测并建议合适的处理方式：
+
+### 关系类型
+
+- **父子关系**：一个 feature 是另一个 feature 的子任务（如 `user-profile` 包含 `user-profile-avatar-upload`）
+- **依赖关系**：一个 feature 依赖另一个 feature 的完成（如 `order-checkout` 依赖 `payment-gateway`）
+- **交叉关系**：两个 feature 共享部分实现或数据（如 `cart` 和 `wishlist` 都访问商品数据）
+- **重复关系**：两个 feature 目标相同或高度重叠
+
+### 处理策略
+
+遵循「尽可能不增加重复目录，但不让一个 feature 臃肿」原则：
+
+1. **检测重叠**：创建新 feature 前，检查名称、目标、范围是否与现有 feature 重叠超过 60%
+2. **优先合并**：如果高度重叠（>60%），优先建议用户合并到已有 feature，而不是新建
+3. **独立拆分**：如果只是部分重叠或涉及不同模块，创建独立的小 feature，保持低耦合
+4. **建立关系**：如果是父子或依赖关系，在 `index.md` 和 feature `readme.md` 中明确记录
+5. **明确边界**：每个 feature 必须定义"包含什么"和"不包含什么"
+6. **聚合导航**：当新建一个大 feature 时，如果发现现有多个 feature 可以作为它的子集，创建聚合 feature 目录，通过索引树结构导航到子 feature
+
+### 聚合导航
+
+当需要创建一个大的聚合 feature（如 `user-profile`），而现有 `user-profile-avatar-upload`、`user-profile-settings` 等可以作为其子 feature 时：
+
+- 创建聚合 feature 目录 `feature-memory/user-profile/`
+- 在聚合 feature 的 `readme.md` 中列出子 feature 索引树
+- 在 `index.md` 中为子 feature 设置父 feature 为聚合 feature
+- 子 feature 的实际文档仍保留在各自独立目录中，不重复存储
+- 聚合 feature 可以包含跨子 feature 的总体设计和协调信息
+
+### 边界定义
+
+每个 feature 的 `readme.md` 应包含：
+- **包含**：此 feature 负责的功能范围、核心交付物、关键接口/模块
+- **不包含**：不在此 feature 范围内的功能、由其他 feature 负责的部分、明确排除的边界
+
 ## 适用边界
 
 - 适合：长期 feature、复杂调试、多 Agent 交接、上下文恢复、架构决策记录。

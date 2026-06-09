@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.2.0 - 2026-06-09
+
+### Added
+
+- Added feature relationship management to handle similar, overlapping, parent-child, and cross-cutting features.
+- Added "Parent Feature" and "Dependencies" columns to `index.md` for tracking relationships.
+- Added "Includes" and "Excludes" sections to feature `readme.md` for clear boundary definition.
+- Added overlap detection strategy: before creating a new feature, check if it overlaps >60% with existing features.
+- Added preference for merging highly overlapping features rather than creating duplicates.
+- Added "small but independent" principle: features should be small enough to stay focused but independent to avoid coupling.
+- Added aggregate navigation mechanism: when creating a large feature, existing child features can be linked via index tree without duplication.
+- Added aggregate feature template with child feature index tree structure.
+
+### Changed
+
+- Renumbered core principles: added "Principle 2: Clear Boundaries and Relationships".
+- Updated handling strategy to include independent splitting and aggregate navigation.
+
 ## 1.1.2 - 2026-06-07
 
 ### Changed
