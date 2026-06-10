@@ -175,6 +175,7 @@ Redis 已启用
 ```text
 feature-memory/
 ├── index.md
+├── bug-index.md
 ├── project/
 │   ├── overview.md
 │   ├── architecture.md
@@ -190,7 +191,7 @@ feature-memory/
         └── BUG-YYYYMMDD-XXX-description/
 ```
 
-feature 目录名使用 kebab-case，例如 `payment-callback`。详细模板见 `references/templates.md`，复杂 debug 流程见 `references/debug-workflow.md`。
+`feature-memory/index.md` 是 feature 全局索引；`feature-memory/bug-index.md` 是 Bug 知识库索引（见 `references/templates.md`）。feature 目录名使用 kebab-case，例如 `payment-callback`。详细模板见 `references/templates.md`，复杂 debug 流程见 `references/debug-workflow.md`。
 
 ***
 
@@ -278,13 +279,16 @@ feature 基础信息。记录目标、范围、依赖、约束、注意事项和
 进入 debug 记忆流程后：
 
 1. 先定位或确认目标 feature；不确定时向用户确认，或创建临时 feature 目录名。
-2. 在 `feature-memory/<feature-name>/debug/` 下创建独立 Bug 目录，命名为 `BUG-YYYYMMDD-XXX-description`。
-3. 初始化 `readme.md`、`timeline.md`、`conclusion.md`、`debug.sh` 和 `output/`。
-4. 第一轮就必须写入问题定义、初始假设、验证方式，并生成一键执行的 `debug.sh`。
-5. `debug.sh` 必须自动把本轮诊断输出写入下一个版本化日志文件，例如 `output/v1.log`、`output/v2.log`、`output/v3.log`。
-6. 每轮用户执行 `debug.sh` 后，只需把生成的 `output/vN.log` 内容原样粘贴回来，或告知日志文件路径。
-7. 每轮用户提供日志或输出后，必须追加 `timeline.md`，更新 `conclusion.md`，并重写 `debug.sh` 指向下一轮 `output/vN+1.log`。
-8. 不得把复杂排障只写入 feature 级 `progress.md` 后结束。
+2. **必先读 `feature-memory/bug-index.md` 检索是否存在同类 Bug 或相同关键词 / 根因分类的历史记录（如 `401`, `browser-native-request` 等）。
+3. 若 bug-index 存在匹配记录，先告知用户「已发现类似 Bug，读取对应 conclusion.md 作为起点」，并优先复用已有结论中的根因分类。
+4. 在 `feature-memory/<feature-name>/debug/` 下创建独立 Bug 目录，命名为 `BUG-YYYYMMDD-XXX-description`。
+5. 初始化 `readme.md`、`timeline.md`、`conclusion.md`、`debug.sh` 和 `output/`。
+6. 第一轮就必须写入问题定义、初始假设、验证方式，并生成一键执行的 `debug.sh`。
+7. `debug.sh` 必须自动把本轮诊断输出写入下一个版本化日志文件，例如 `output/v1.log`、`output/v2.log`、`output/v3.log`。
+8. 每轮用户执行 `debug.sh` 后，只需把生成的 `output/vN.log` 内容原样粘贴回来，或告知日志文件路径。
+9. 每轮用户提供日志或输出后，必须追加 `timeline.md`，更新 `conclusion.md`，并重写 `debug.sh` 指向下一轮 `output/vN+1.log`。
+10. **Bug 结束（RESOLVED / BLOCKED / VERIFYING）后，必须在 `conclusion.md` 顶部写入「记忆索引」与「前置知识」区块，并更新 `feature-memory/bug-index.md` 登记一条记录。
+11. 不得把复杂排障只写入 feature 级 `progress.md` 后结束。
 
 详细 debug 流程、文档模板、`debug.sh` 安全边界和日志交互协议见 `references/debug-workflow.md`。
 

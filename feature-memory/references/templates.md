@@ -24,6 +24,36 @@
 - **父 feature**：如果当前 feature 是某个父 feature 的子任务，填写父 feature 名称；否则填 `-`
 - **依赖**：列出当前 feature 依赖的其他 feature，用逗号分隔；否则填 `-`
 
+## feature-memory/bug-index.md（全局 Bug 知识库索引）
+
+> 每个 Bug 解决后，必须在此登记一条记录。遇到相同或相似问题时，AI 先检索此索引，避免重复排查。
+
+```md
+| Bug ID | 标题 | 根因分类 | 关键词 | 所属 feature | 状态 | 最近更新 | 入口文档 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| BUG-20260609-001-browser-audio-401 | 浏览器录音无法播放（401） | auth/browser-native-request | browser, 401, audio, X-Jwt-Token, axios-blob, ObjectURL | call-management | RESOLVED | 2026-06-09 | feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/conclusion.md |
+```
+
+### 根因分类建议（Tags
+
+- auth/browser-native-request
+- auth/jwt-token-missing
+- data/tcc-misconfig
+- api/frontend-deploy-not-updated
+- infra/object-storage
+- db/query
+- frontend/cors
+- perf/timezone
+
+> 根因分类和关键词用于相似问题的语义匹配，标签建议覆盖：浏览器行为 / 鉴权方式 / 组件名 / 错误码 / 关键文件名等信息，便于后续匹配。
+
+### 记录规则
+
+1. 每个 RESOLVED 的 Bug 必须登记一条
+2. 关键词覆盖：根因、错误码、核心组件名
+3. 「所属 feature 指向对应 `<feature-name>/debug/BUG-XXX/conclusion.md`
+4. BLOCKED 或 VERIFYING 的 Bug 也要登记，方便接力
+
 ## project/overview.md
 
 ```md
@@ -305,6 +335,20 @@ IN_PROGRESS
 
 ```md
 # Debug Conclusion
+
+## 记忆索引
+
+- 关联记忆索引：`feature-memory/bug-index.md`
+- 本 Bug ID：`BUG-YYYYMMDD-XXX-description`
+- 根因分类：`auth/browser-native-request` 或其他分类（见 `feature-memory/bug-index.md`）
+- 关键词：`browser, 401, audio, X-Jwt-Token, axios-blob, ObjectURL`
+
+## 前置知识 / 参考技能
+
+> 列出理解或复现本问题所需的前置信息，指向 `feature-memory/project/` 或其他 skill 文档；若无则写 `-`。
+
+- 依赖前置知识：`feature-memory/project/api.md`（JWT 鉴权流程）、`feature-memory/project/architecture.md`（TOS 初始化）
+- 同类问题参考：检索 `feature-memory/bug-index.md` 中相同 `根因分类` 或 `关键词`
 
 ## 当前发现
 

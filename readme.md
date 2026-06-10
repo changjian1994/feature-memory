@@ -163,6 +163,25 @@ feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/
 - `debug.sh` 默认只包含只读诊断命令；写入、删除、迁移、重启服务或修改数据库前必须先确认。
 - `output/` 保存每轮诊断输出，便于 Agent 基于日志继续收敛；旧日志不得被覆盖。
 
+## Bug 知识库索引（bug-index.md）
+
+每个复杂 Bug 排障结束后，必须在 `feature-memory/bug-index.md` 登记一条记录。它的价值是：AI 下次遇到相同或相似问题时，能先检索 `bug-index.md`，直接复用历史结论和修复路径，避免重复排查。
+
+### 登记字段
+
+- Bug ID：`BUG-YYYYMMDD-XXX-description`
+- 标题：一句话概括
+- 根因分类：如 `auth/browser-native-request`、`data/tcc-misconfig`
+- 关键词：覆盖错误码、组件名、关键行为（如 `browser, 401, audio, X-Jwt-Token`）
+- 所属 feature / 状态 / 最近更新 / 入口文档（指向 `conclusion.md`）
+
+### 触发时机
+
+1. 进入 debug 流程时，**必先读** `feature-memory/bug-index.md` 检索同类 Bug
+2. 若命中匹配记录，直接告诉用户「已发现类似 Bug」，并以对应 `conclusion.md` 作为起点
+3. Bug 结束（RESOLVED / BLOCKED / VERIFYING）后，**必须**更新 `bug-index.md` 登记一条新记录
+4. `conclusion.md` 顶部需写入「记忆索引」与「前置知识」区块（见模板）
+
 ## Feature 关系管理
 
 当遇到类似、交叉或父子包含关系的 feature 时，skill 会自动检测并建议合适的处理方式：

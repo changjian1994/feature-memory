@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.3.0 - 2026-06-09
+
+### Added
+
+- Added global Bug knowledge base index `feature-memory/bug-index.md` with Bug ID, root cause category, keyword tags, and entry document pointer.
+- Added "Memory Index" and "Prerequisite Knowledge" blocks at the top of `conclusion.md` template, linking back to `bug-index.md`.
+- Added requirement: before entering a debug workflow, the Agent must first read `bug-index.md` to look for similar Bugs by keyword / root cause category.
+- Added requirement: after a Bug ends (RESOLVED / BLOCKED / VERIFYING), the Agent must register a new row in `bug-index.md`.
+- Added `bug-index.md` to directory structure in SKILL.md and both README files.
+- Added dedicated section in both Chinese and English README explaining the Bug knowledge base index and its value.
+
+### Changed
+
+- Updated the debug workflow steps in SKILL.md to include the bug-index pre-check and post-check registration.
+
 ## 1.2.0 - 2026-06-09
 
 ### Added

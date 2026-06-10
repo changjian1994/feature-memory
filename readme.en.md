@@ -163,6 +163,25 @@ feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/
 - `debug.sh` should default to read-only diagnostic commands; writing, deleting, migrating, restarting services, or modifying databases requires confirmation first.
 - `output/` stores diagnostic outputs from each round so the Agent can continue converging from logs; old logs must not be overwritten.
 
+## Bug Knowledge Base Index (`bug-index.md`)
+
+After each complex Bug is resolved (or blocked/verifying), the Agent must register one record in `feature-memory/bug-index.md`. The value: the next time the Agent encounters the same or similar issue, it first scans `bug-index.md` and reuses the historical conclusion and fix path, avoiding duplicate investigations.
+
+### Registration Fields
+
+- Bug ID: `BUG-YYYYMMDD-XXX-description`
+- Title: one-line summary
+- Root cause category: e.g. `auth/browser-native-request`, `data/tcc-misconfig`
+- Keywords: covering error codes, component names, key behaviors (e.g. `browser, 401, audio, X-Jwt-Token`)
+- Owner feature / status / last update / entry document (pointing to `conclusion.md`)
+
+### Trigger Rules
+
+1. When entering a debug workflow, **must first read** `feature-memory/bug-index.md` to look for similar Bugs
+2. If a match is found, inform the user "similar Bug found" and use the corresponding `conclusion.md` as the starting point
+3. After a Bug ends (RESOLVED / BLOCKED / VERIFYING), **must** update `bug-index.md` with a new record
+4. `conclusion.md` must include a "Memory Index" and "Prerequisite Knowledge" block at the top (see template)
+
 ## Feature Relationship Management
 
 When encountering similar, overlapping, parent-child, or cross-cutting features, the skill automatically detects and suggests appropriate handling:
