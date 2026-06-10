@@ -10,19 +10,52 @@
 ## feature-memory/index.md
 
 ```md
-| Feature | 状态 | 最近更新 | 负责人 | 父 feature | 依赖 | 下一步动作 | 相关文档 |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| payment-callback | IN_PROGRESS | 2025-01-01 | agent/user | - | - | 实现重试机制 | feature-memory/payment-callback/handoff.md |
-| payment-callback-retry | IN_PROGRESS | 2025-01-02 | agent/user | payment-callback | - | 完成指数退避 | feature-memory/payment-callback-retry/handoff.md |
-| order-checkout | TODO | 2025-01-01 | agent/user | - | payment-callback | 等待支付模块 | feature-memory/order-checkout/handoff.md |
+| Feature | 工作状态 | 记忆状态 | 最近更新 | 负责人 | 父 feature | 依赖 | 下一步动作 | 相关文档 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| payment-callback | IN_PROGRESS | ACTIVE | 2025-01-01 | agent/user | - | - | 实现重试机制 | feature-memory/payment-callback/handoff.md |
+| payment-callback-retry | IN_PROGRESS | ACTIVE | 2025-01-02 | agent/user | payment-callback | - | 完成指数退避 | feature-memory/payment-callback-retry/handoff.md |
+| order-checkout | TODO | ACTIVE | 2025-01-01 | agent/user | - | payment-callback | 等待支付模块 | feature-memory/order-checkout/handoff.md |
 ```
 
-允许的状态值：`TODO`、`IN_PROGRESS`、`BLOCKED`、`VERIFYING`、`DONE`、`ARCHIVED`。
+允许的工作状态值：`TODO`、`IN_PROGRESS`、`BLOCKED`、`VERIFYING`、`DONE`、`ARCHIVED`。
+允许的记忆状态值：`ACTIVE`、`VERIFYING`、`ARCHIVED`、`LEGACY`。
+
+默认只读取 `ACTIVE` 和 `VERIFYING` 记忆；`ARCHIVED` 和 `LEGACY` 仅在用户要求、关键词命中或当前任务依赖历史结论时读取。
 
 ### 关系字段说明
 
 - **父 feature**：如果当前 feature 是某个父 feature 的子任务，填写父 feature 名称；否则填 `-`
 - **依赖**：列出当前 feature 依赖的其他 feature，用逗号分隔；否则填 `-`
+
+## feature-memory/ai-handoff.md
+
+> 项目级首读入口。新的 Agent 接手项目时先读此文件，再按需读取具体 feature。
+
+```md
+# AI Handoff
+
+## 当前活跃 Feature
+
+| Feature | 记忆状态 | 工作状态 | 下一步 | 入口 |
+| --- | --- | --- | --- | --- |
+| payment-callback | ACTIVE | IN_PROGRESS | 实现重试机制 | feature-memory/payment-callback/handoff.md |
+
+## 当前验证中 Bug
+
+| Bug ID | 状态 | 关键词 | 入口 |
+| --- | --- | --- | --- |
+| BUG-20260609-001-browser-audio-401 | VERIFYING | browser, 401, audio | feature-memory/call-management/debug/BUG-20260609-001-browser-audio-401/conclusion.md |
+
+## 最近重要决策
+
+## 当前风险
+
+## 下一步建议
+
+## 归档提示
+
+- 默认不要读取 ARCHIVED / LEGACY feature，除非用户要求或当前任务命中历史关键词。
+```
 
 ## feature-memory/bug-index.md（全局 Bug 知识库索引）
 
@@ -225,6 +258,8 @@
 
 ## feature-memory/<feature-name>/progress.md
 
+`progress.md` 记录过程流水和状态变化，避免复制 `handoff.md` 的完整当前结论。
+
 ```md
 # 进度
 
@@ -270,6 +305,8 @@ IN_PROGRESS
 ```
 
 ## feature-memory/<feature-name>/handoff.md
+
+`handoff.md` 是单个 feature 的首读入口，只保留“现在接手必须知道什么”。
 
 ```md
 # 交接

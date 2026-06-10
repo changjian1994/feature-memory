@@ -1,21 +1,23 @@
 # Feature Memory 参考文档
 
-本目录存放 feature memory skill 的详细参考资料。`SKILL.md` 只保留触发边界、硬规则和任务路由；详细模板、debug 规范、feature 关系管理和隐私规则放在这里，按需读取。
+本目录存放 feature memory skill 的详细参考资料。`SKILL.md` 只保留触发边界、硬规则和任务路由；详细模板、debug 规范、feature 关系管理、记忆生命周期和隐私规则放在这里，按需读取。
 
 ## 文件说明
 
 - `templates.md`：项目级、feature 级、Bug 级文档模板。
 - `debug-workflow.md`：复杂问题 debug 目录、日志迭代、`debug.sh` 安全规则和交互协议。
 - `feature-relationship.md`：feature 合并、拆分、父子关系、依赖关系、交叉关系和聚合导航规则。
+- `memory-lifecycle.md`：AI 首读入口、记忆状态、默认读取范围、更新限额、归档压缩和文件职责边界。
 - `privacy.md`：隐私、安全边界、脱敏规则和 Git 提交策略。
 
 ## 读取时机
 
 - 创建或更新 feature 文档时，读取 `templates.md`。
 - 创建、拆分、合并、聚合 feature 前，读取 `feature-relationship.md`。
+- 恢复上下文、交接、归档或 memory 过多时，读取 `memory-lifecycle.md`。
 - 处理复杂 Bug、日志分析或多轮 debug 时，读取 `debug-workflow.md`。
 - 记录架构、接口、数据库、日志或任何可能敏感的信息前，读取 `privacy.md`。
-- 只需要恢复上下文时，优先读取 `feature-memory/<feature-name>/handoff.md`、`progress.md`、`design.md`，不要主动加载全部参考文档。
+- 只需要恢复上下文时，优先读取 `feature-memory/ai-handoff.md`、目标 feature 的 `handoff.md` 和 `progress.md`，不要主动加载全部参考文档。
 
 ## 维护规则
 

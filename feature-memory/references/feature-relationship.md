@@ -94,10 +94,10 @@
 `feature-memory/index.md` 至少包含以下关系字段：
 
 ```md
-| Feature | 状态 | 最近更新 | 负责人 | 父 feature | 依赖 | 下一步动作 | 相关文档 |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| user-profile | IN_PROGRESS | 2026-06-10 | agent/user | - | - | 协调子 feature | feature-memory/user-profile/handoff.md |
-| user-profile-avatar-upload | IN_PROGRESS | 2026-06-10 | agent/user | user-profile | - | 完成上传验证 | feature-memory/user-profile-avatar-upload/handoff.md |
+| Feature | 工作状态 | 记忆状态 | 最近更新 | 负责人 | 父 feature | 依赖 | 下一步动作 | 相关文档 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| user-profile | IN_PROGRESS | ACTIVE | 2026-06-10 | agent/user | - | - | 协调子 feature | feature-memory/user-profile/handoff.md |
+| user-profile-avatar-upload | IN_PROGRESS | ACTIVE | 2026-06-10 | agent/user | user-profile | - | 完成上传验证 | feature-memory/user-profile-avatar-upload/handoff.md |
 ```
 
 ## feature readme 边界要求

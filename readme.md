@@ -36,6 +36,7 @@ AI 辅助开发经常会遇到这些情况：
 │   └── references/
 │       ├── debug-workflow.md
 │       ├── feature-relationship.md
+│       ├── memory-lifecycle.md
 │       ├── privacy.md
 │       ├── readme.md
 │       └── templates.md
@@ -50,6 +51,7 @@ AI 辅助开发经常会遇到这些情况：
 - `feature-memory/references/templates.md`：项目级、feature 级、Bug 级文档模板。
 - `feature-memory/references/debug-workflow.md`：复杂问题排障流程、`debug.sh` 安全规则和日志迭代协议。
 - `feature-memory/references/feature-relationship.md`：feature 合并、拆分、父子关系、依赖关系和聚合导航规则。
+- `feature-memory/references/memory-lifecycle.md`：AI 首读入口、记忆状态、更新限额、归档压缩和文件职责边界。
 - `feature-memory/references/privacy.md`：skill 内置隐私、安全边界和脱敏规则。
 - `feature-memory/references/readme.md`：参考资料说明和读取时机。
 - `.github/ISSUE_TEMPLATE/`：GitHub Issue 模板。
@@ -105,7 +107,7 @@ Agent 会先给出简短问候，并让用户选择下一步。
 4. 退出
 ```
 
-如果选择继续已有 feature，Agent 会读取目标项目的 `feature-memory/index.md`，列出已有 feature 供用户选择；用户选定后，再读取对应 feature 的 `handoff.md`、`progress.md`、`design.md` 和 `decision.md` 来恢复上下文。
+如果选择继续已有 feature，Agent 会先读取目标项目的 `feature-memory/ai-handoff.md` 和 `feature-memory/index.md`，优先列出 `ACTIVE` / `VERIFYING` feature；用户选定后，再读取对应 feature 的 `handoff.md`、`progress.md`、必要时读取 `design.md` 和 `decision.md` 来恢复上下文。
 
 如果选择创建新的 feature，Agent 会询问 feature 名称、目标和范围，并初始化对应的 `feature-memory/<feature-name>/` 记忆目录。
 
@@ -115,7 +117,9 @@ skill 会要求在目标项目根目录维护 `feature-memory/` 目录：
 
 ```text
 feature-memory/
+├── ai-handoff.md
 ├── index.md
+├── bug-index.md
 ├── project/
 │   ├── overview.md
 │   ├── architecture.md
@@ -137,10 +141,12 @@ feature-memory/
 
 1. 定位目标项目根目录的 `feature-memory/`。
 2. 如果记忆目录不存在，初始化最小项目级文档结构。
-3. 读取 `index.md`、`project/*` 和目标 feature 的关键文档。
-4. 区分已验证事实、假设和待确认问题。
-5. 开始实现、调试、重构或文档更新。
-6. 如果 feature 目标、设计、状态、风险、交接信息或 debug 结论发生变化，任务结束前同步更新相关记忆文档。
+3. 优先读取 `ai-handoff.md`，再按需读取 `index.md` 和目标 feature 的关键文档。
+4. 默认只读取 `ACTIVE` 和 `VERIFYING` 记忆，归档内容仅在命中关键词或用户要求时读取。
+5. 区分已验证事实、假设和待确认问题。
+6. 开始实现、调试、重构或文档更新。
+7. 如果 feature 目标、设计、状态、风险、交接信息或 debug 结论发生变化，任务结束前同步更新相关记忆文档。
+8. 默认单次任务只更新最关键的 1-3 个 memory 文件，避免同步成本失控。
 
 ## Debug 约定
 
@@ -221,6 +227,26 @@ feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/
 每个 feature 的 `readme.md` 应包含：
 - **包含**：此 feature 负责的功能范围、核心交付物、关键接口/模块
 - **不包含**：不在此 feature 范围内的功能、由其他 feature 负责的部分、明确排除的边界
+
+## 记忆收敛与首读入口
+
+为了避免 memory 本身变成新的上下文负担，目标项目应维护 `feature-memory/ai-handoff.md` 作为项目级首读入口。
+
+### 读取策略
+
+- 新 Agent 接手时先读 `ai-handoff.md`，再读具体 feature 的 `handoff.md`。
+- `index.md` 使用“工作状态”和“记忆状态”两个字段。
+- 记忆状态包括 `ACTIVE`、`VERIFYING`、`ARCHIVED`、`LEGACY`。
+- Agent 默认只读取 `ACTIVE` 和 `VERIFYING` 记忆。
+- `ARCHIVED` 和 `LEGACY` 仅在用户要求、关键词命中或当前任务依赖历史结论时读取。
+
+### 更新策略
+
+- 小改动默认不写 memory，例如样式、文案、格式化、注释、单文件低风险修复。
+- 当接口、数据库、权限、架构、线上风险、debug 结论或交接信息变化时，应更新 memory。
+- 默认单次任务最多更新 1-3 个 memory 文件。
+- `progress.md` 记录过程流水和状态变化，`handoff.md` 记录当前接手视图，避免重复写同一段结论。
+- 完成且稳定的 feature 应归档压缩：更新最终摘要，停止持续扩写 `progress.md`，并将记忆状态标记为 `ARCHIVED`。
 
 ## 适用边界
 

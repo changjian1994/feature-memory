@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.5.0 - 2026-06-10
+
+### Added
+
+- Added `references/memory-lifecycle.md` with AI first-read entry, memory states, default reading scope, update limits, file responsibility boundaries, and archive compaction rules.
+- Added `feature-memory/ai-handoff.md` as the project-level first-read entry template.
+- Added memory state guidance for `ACTIVE`, `VERIFYING`, `ARCHIVED`, and `LEGACY`.
+
+### Changed
+
+- Updated `SKILL.md` startup flow to read `ai-handoff.md` first and default to `ACTIVE` / `VERIFYING` memory.
+- Updated completion flow to limit routine memory updates to the most important 1-3 files.
+- Updated templates and README files to distinguish `progress.md` process history from `handoff.md` current handoff view.
+- Updated `index.md` template to separate work status from memory status.
+
 ## 1.4.1 - 2026-06-10
 
 ### Added

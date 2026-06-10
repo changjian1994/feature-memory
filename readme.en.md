@@ -36,6 +36,7 @@ AI-assisted development often runs into these problems:
 │   └── references/
 │       ├── debug-workflow.md
 │       ├── feature-relationship.md
+│       ├── memory-lifecycle.md
 │       ├── privacy.md
 │       ├── readme.md
 │       └── templates.md
@@ -50,6 +51,7 @@ AI-assisted development often runs into these problems:
 - `feature-memory/references/templates.md`: templates for project-level, feature-level, and Bug-level documents.
 - `feature-memory/references/debug-workflow.md`: complex debugging workflow, `debug.sh` safety rules, and log iteration protocol.
 - `feature-memory/references/feature-relationship.md`: rules for feature merging, splitting, parent-child relationships, dependencies, and aggregate navigation.
+- `feature-memory/references/memory-lifecycle.md`: AI first-read entry, memory states, update limits, archiving, and file responsibility boundaries.
 - `feature-memory/references/privacy.md`: built-in privacy, security boundary, and redaction guidance for the skill.
 - `feature-memory/references/readme.md`: reference documentation overview and when to read each file.
 - `.github/ISSUE_TEMPLATE/`: GitHub Issue templates.
@@ -105,7 +107,7 @@ Please choose:
 4. Exit
 ```
 
-If the user chooses to continue an existing feature, the Agent reads the target project's `feature-memory/index.md` and lists available features. After the user selects one, the Agent reads that feature's `handoff.md`, `progress.md`, `design.md`, and `decision.md` to recover context.
+If the user chooses to continue an existing feature, the Agent first reads the target project's `feature-memory/ai-handoff.md` and `feature-memory/index.md`, prioritizing `ACTIVE` / `VERIFYING` features. After the user selects one, the Agent reads that feature's `handoff.md`, `progress.md`, and when needed `design.md` and `decision.md` to recover context.
 
 If the user chooses to create a new feature, the Agent asks for the feature name, goal, and scope, then initializes the corresponding `feature-memory/<feature-name>/` memory directory.
 
@@ -115,7 +117,9 @@ The skill asks the Agent to maintain a `feature-memory/` directory at the target
 
 ```text
 feature-memory/
+├── ai-handoff.md
 ├── index.md
+├── bug-index.md
 ├── project/
 │   ├── overview.md
 │   ├── architecture.md
@@ -137,10 +141,12 @@ Note: the target project's `feature-memory/` directory is for development memory
 
 1. Locate `feature-memory/` at the target project root.
 2. If the memory directory does not exist, initialize the minimum project-level document structure.
-3. Read `index.md`, `project/*`, and the target feature's key documents.
-4. Separate verified facts, assumptions, and open questions.
-5. Start implementation, debugging, refactoring, or documentation updates.
-6. Before finishing, update relevant memory documents only when the feature goal, design, status, risk, handoff context, or debug conclusion has changed.
+3. Read `ai-handoff.md` first, then read `index.md` and target feature documents on demand.
+4. By default, read only `ACTIVE` and `VERIFYING` memory; archived content is read only when a keyword matches or the user asks for it.
+5. Separate verified facts, assumptions, and open questions.
+6. Start implementation, debugging, refactoring, or documentation updates.
+7. Before finishing, update relevant memory documents only when the feature goal, design, status, risk, handoff context, or debug conclusion has changed.
+8. By default, update only the most important 1-3 memory files per task to keep synchronization cost bounded.
 
 ## Debugging Convention
 
@@ -221,6 +227,26 @@ When creating a large aggregate feature (e.g., `user-profile`) and existing feat
 Each feature's `readme.md` should include:
 - **Includes**: Feature scope, core deliverables, key interfaces/modules
 - **Excludes**: Out-of-scope functionality, parts handled by other features, explicitly excluded boundaries
+
+## Memory Convergence And First-Read Entry
+
+To prevent memory itself from becoming a new context burden, target projects should maintain `feature-memory/ai-handoff.md` as the project-level first-read entry.
+
+### Reading Strategy
+
+- A new Agent reads `ai-handoff.md` first, then reads a specific feature's `handoff.md` when needed.
+- `index.md` uses both "work status" and "memory status".
+- Memory states are `ACTIVE`, `VERIFYING`, `ARCHIVED`, and `LEGACY`.
+- The Agent reads only `ACTIVE` and `VERIFYING` memory by default.
+- `ARCHIVED` and `LEGACY` are read only when the user asks, a keyword matches, or the current task depends on historical conclusions.
+
+### Update Strategy
+
+- Small edits do not update memory by default, such as style tweaks, copy changes, formatting, comments, or low-risk single-file fixes.
+- Update memory when APIs, databases, permissions, architecture, production risk, debug conclusions, or handoff context change.
+- By default, update at most 1-3 memory files per task.
+- `progress.md` records process history and status changes; `handoff.md` records the current handoff view. Avoid writing the same conclusion into both.
+- Completed and stable features should be compacted: update the final summary, stop continuously extending `progress.md`, and mark the memory state as `ARCHIVED`.
 
 ## Scope
 
