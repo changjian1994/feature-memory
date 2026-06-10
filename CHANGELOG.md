@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.4.1 - 2026-06-10
+
+### Added
+
+- Added a Git pre-commit checkpoint flow in `SKILL.md`, prompting users to check or update feature-memory before commit, tag, push, release, or branch merge.
+- Added interactive options to update memory, check without modification, skip low-risk commits, or cancel the commit flow.
+
 ## 1.4.0 - 2026-06-10
 
 ### Added
