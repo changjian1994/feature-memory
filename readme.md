@@ -35,6 +35,7 @@ AI 辅助开发经常会遇到这些情况：
 │   ├── SKILL.md
 │   └── references/
 │       ├── debug-workflow.md
+│       ├── feature-relationship.md
 │       ├── privacy.md
 │       ├── readme.md
 │       └── templates.md
@@ -45,9 +46,10 @@ AI 辅助开发经常会遇到这些情况：
 └── readme.en.md
 ```
 
-- `feature-memory/SKILL.md`：skill 入口文件，包含触发条件、核心原则、目录规范和主流程。
+- `feature-memory/SKILL.md`：skill 入口文件，采用 Lean Core 路由结构，包含触发边界、硬规则和按需 reference 读取规则。
 - `feature-memory/references/templates.md`：项目级、feature 级、Bug 级文档模板。
 - `feature-memory/references/debug-workflow.md`：复杂问题排障流程、`debug.sh` 安全规则和日志迭代协议。
+- `feature-memory/references/feature-relationship.md`：feature 合并、拆分、父子关系、依赖关系和聚合导航规则。
 - `feature-memory/references/privacy.md`：skill 内置隐私、安全边界和脱敏规则。
 - `feature-memory/references/readme.md`：参考资料说明和读取时机。
 - `.github/ISSUE_TEMPLATE/`：GitHub Issue 模板。

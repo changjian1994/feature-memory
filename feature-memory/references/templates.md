@@ -34,7 +34,7 @@
 | BUG-20260609-001-browser-audio-401 | 浏览器录音无法播放（401） | auth/browser-native-request | browser, 401, audio, X-Jwt-Token, axios-blob, ObjectURL | call-management | RESOLVED | 2026-06-09 | feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/conclusion.md |
 ```
 
-### 根因分类建议（Tags
+### 根因分类建议（Tags）
 
 - auth/browser-native-request
 - auth/jwt-token-missing
@@ -51,7 +51,7 @@
 
 1. 每个 RESOLVED 的 Bug 必须登记一条
 2. 关键词覆盖：根因、错误码、核心组件名
-3. 「所属 feature 指向对应 `<feature-name>/debug/BUG-XXX/conclusion.md`
+3. 入口文档指向对应 `<feature-name>/debug/BUG-XXX/conclusion.md`
 4. BLOCKED 或 VERIFYING 的 Bug 也要登记，方便接力
 
 ## project/overview.md

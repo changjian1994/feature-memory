@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.4.0 - 2026-06-10
+
+### Added
+
+- Added `references/feature-relationship.md` for feature merging, splitting, parent-child relationships, dependencies, cross-cutting relationships, and aggregate navigation.
+
+### Changed
+
+- Refactored `SKILL.md` into a Lean Core routing structure that keeps trigger boundaries, hard rules, task routing, startup flow, completion flow, and success criteria in the main entry file.
+- Moved detailed feature relationship guidance out of `SKILL.md` into an on-demand reference file.
+- Expanded `debug-workflow.md` with explicit `bug-index.md` pre-check and post-debug registration rules.
+- Updated README files and reference documentation to describe the Lean Core routing structure and the new feature relationship reference.
+
 ## 1.3.0 - 2026-06-09
 
 ### Added

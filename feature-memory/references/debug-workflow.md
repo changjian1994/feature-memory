@@ -21,14 +21,16 @@
 首次进入某个 Bug 的 debug 记忆流程时：
 
 1. 确认目标 feature 名称；不确定时先询问用户，或基于问题生成临时 kebab-case 名称。
-2. 确保存在 `feature-memory/<feature-name>/debug/`。
-3. 创建 Bug 目录：`BUG-YYYYMMDD-XXX-description`。
-4. 初始化 `readme.md`、`timeline.md`、`conclusion.md`、`debug.sh` 和 `output/`。
-5. 在 `readme.md` 中记录问题定义、影响范围、复现步骤、预期结果和实际结果。
-6. 在 `timeline.md` 中追加第 1 轮假设、验证方式、当前结果、证据和下一步。
-7. 在 `conclusion.md` 中写入当前发现、已确认事实、已排除假设、剩余假设、下一步验证和待确认问题。
-8. 在 `debug.sh` 中写入下一轮一键只读诊断脚本，并让脚本自动输出到 `output/v1.log`。
-9. 更新对应 feature 的 `handoff.md` 或 `progress.md`，添加相关 Bug 路径。
+2. 先读取 `feature-memory/bug-index.md`，按关键词、错误码、根因分类、组件名检索同类 Bug。
+3. 如果命中历史记录，读取对应 `conclusion.md` 作为起点，优先复用已验证结论和根因分类。
+4. 确保存在 `feature-memory/<feature-name>/debug/`。
+5. 创建 Bug 目录：`BUG-YYYYMMDD-XXX-description`。
+6. 初始化 `readme.md`、`timeline.md`、`conclusion.md`、`debug.sh` 和 `output/`。
+7. 在 `readme.md` 中记录问题定义、影响范围、复现步骤、预期结果和实际结果。
+8. 在 `timeline.md` 中追加第 1 轮假设、验证方式、当前结果、证据和下一步。
+9. 在 `conclusion.md` 中写入记忆索引、前置知识、当前发现、已确认事实、已排除假设、剩余假设、下一步验证和待确认问题。
+10. 在 `debug.sh` 中写入下一轮一键只读诊断脚本，并让脚本自动输出到 `output/v1.log`。
+11. 更新对应 feature 的 `handoff.md` 或 `progress.md`，添加相关 Bug 路径。
 
 如果 Bug 目录已存在，不要新建重复目录，应继续追加 `timeline.md` 并更新 `conclusion.md`、`debug.sh`。
 
@@ -97,6 +99,24 @@ BUG-20250101-001-login-timeout
 - 每轮排障后根据新假设更新。
 
 `output/` 保存用户执行 `debug.sh` 后产生的日志，例如 `v1.log`、`v2.log`、`v3.log`。
+
+## Bug 知识库索引
+
+`feature-memory/bug-index.md` 是全局 Bug 知识库。进入 debug 流程前必须读取它，Bug 结束后必须更新它。
+
+进入 debug 前：
+
+1. 从用户描述、错误栈、日志和文件名中提取关键词。
+2. 在 `bug-index.md` 中匹配 Bug ID、标题、根因分类和关键词。
+3. 如果命中类似 Bug，读取入口文档中的 `conclusion.md`。
+4. 将命中的历史结论作为初始假设，而不是从零开始排查。
+
+Bug 结束时：
+
+1. 将状态归类为 `RESOLVED`、`BLOCKED` 或 `VERIFYING`。
+2. 在 `conclusion.md` 顶部补齐“记忆索引”和“前置知识 / 参考技能”。
+3. 在 `bug-index.md` 新增或更新一行，包含 Bug ID、标题、根因分类、关键词、所属 feature、状态、最近更新和入口文档。
+4. 关键词应覆盖错误码、核心组件名、浏览器/后端/数据库/基础设施行为和关键文件名。
 
 ## 一键脚本循环
 

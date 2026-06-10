@@ -35,6 +35,7 @@ AI-assisted development often runs into these problems:
 │   ├── SKILL.md
 │   └── references/
 │       ├── debug-workflow.md
+│       ├── feature-relationship.md
 │       ├── privacy.md
 │       ├── readme.md
 │       └── templates.md
@@ -45,9 +46,10 @@ AI-assisted development often runs into these problems:
 └── readme.en.md
 ```
 
-- `feature-memory/SKILL.md`: the skill entry file, including trigger conditions, core principles, directory conventions, and the main workflow.
+- `feature-memory/SKILL.md`: the skill entry file, using a Lean Core routing structure with trigger boundaries, hard rules, and on-demand reference loading rules.
 - `feature-memory/references/templates.md`: templates for project-level, feature-level, and Bug-level documents.
 - `feature-memory/references/debug-workflow.md`: complex debugging workflow, `debug.sh` safety rules, and log iteration protocol.
+- `feature-memory/references/feature-relationship.md`: rules for feature merging, splitting, parent-child relationships, dependencies, and aggregate navigation.
 - `feature-memory/references/privacy.md`: built-in privacy, security boundary, and redaction guidance for the skill.
 - `feature-memory/references/readme.md`: reference documentation overview and when to read each file.
 - `.github/ISSUE_TEMPLATE/`: GitHub Issue templates.
