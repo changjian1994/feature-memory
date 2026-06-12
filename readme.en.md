@@ -2,118 +2,84 @@
 
 Make feature context in AI-assisted development traceable, recoverable, and easy to hand off.
 
-A feature-level memory skill for Code Agents. It helps persist design decisions, progress, handoff context, and debugging evidence inside the project during multi-step development, debugging, and context recovery.
+`feature-memory` is a Markdown-based skill for Code Agents / IDE Agents. It persists important context from long-running features, complex debugging, and handoff recovery inside the project, so the next Agent or teammate can quickly understand what is done, why it was done, and what to do next.
 
-It is intended for Code Agents / IDE Agents that support Markdown-based skills or directory-based skill packages.
+> Intended for Code Agents / IDE Agents that support directory-based skill packages or Markdown-based skills.
 
-## What It Solves
+## Why It Exists
 
 AI-assisted development often runs into these problems:
 
 - A long-running feature loses earlier design decisions across sessions.
 - A new Agent needs the same background, progress, and blockers explained again.
-- Debugging evidence is scattered across multiple conversation turns.
-- Multiple Agents cannot quickly tell what is done, what remains, and why decisions were made.
+- Debugging hypotheses, logs, and conclusions are scattered across conversations.
+- Multiple Agents or teammates cannot quickly tell the current project state.
 
-`feature-memory` is not just a documentation template. It is a context memory workflow for Code Agents, helping engineering teams capture long-running features, complex debugging, and handoff recovery inside the project so the next Agent or teammate can continue from the current state instead of starting over.
+`feature-memory` is not just a documentation template. It is a context memory workflow for Code Agents. It helps the Agent recover memory before applicable tasks and continue from the current state instead of starting over.
 
-## Core Capabilities
+## What It Does
 
-- Memory first: read existing feature memory before applicable tasks to avoid duplicate work and repeated debugging.
-- Facts versus assumptions: keep verified facts, open questions, and debug hypotheses clearly separated.
-- Scoped updates: update memory documents when goals, design, status, risks, handoff context, or debug conclusions change.
-- Fast handoff: help a new Agent recover context quickly through `handoff.md`, `progress.md`, and `design.md`.
-- Debug convergence: use dedicated Bug directories to track hypotheses, validation steps, logs, and the latest conclusion.
-
-## Repository Structure
-
-```text
-.
-├── .github/
-│   └── ISSUE_TEMPLATE/
-├── feature-memory/
-│   ├── SKILL.md
-│   └── references/
-│       ├── debug-workflow.md
-│       ├── feature-relationship.md
-│       ├── memory-lifecycle.md
-│       ├── privacy.md
-│       ├── readme.md
-│       └── templates.md
-├── CHANGELOG.md
-├── LICENSE
-├── PRIVACY.md
-├── readme.md
-└── readme.en.md
-```
-
-- `feature-memory/SKILL.md`: the skill entry file, using a Lean Core routing structure with trigger boundaries, hard rules, and on-demand reference loading rules.
-- `feature-memory/references/templates.md`: templates for project-level, feature-level, and Bug-level documents.
-- `feature-memory/references/debug-workflow.md`: complex debugging workflow, `debug.sh` safety rules, and log iteration protocol.
-- `feature-memory/references/feature-relationship.md`: rules for feature merging, splitting, parent-child relationships, dependencies, and aggregate navigation.
-- `feature-memory/references/memory-lifecycle.md`: AI first-read entry, memory states, update limits, archiving, and file responsibility boundaries.
-- `feature-memory/references/privacy.md`: built-in privacy, security boundary, and redaction guidance for the skill.
-- `feature-memory/references/readme.md`: reference documentation overview and when to read each file.
-- `.github/ISSUE_TEMPLATE/`: GitHub Issue templates.
-- `CHANGELOG.md`: version history.
-- `LICENSE`: MIT open source license.
-- `PRIVACY.md`: privacy, redaction, and target-project Git commit guidance.
+- **Context recovery**: when continuing an existing feature, read project-level `ai-handoff.md` and key feature documents first.
+- **Scoped updates**: update memory only when goals, design, status, risks, handoff context, or debug conclusions change.
+- **Complex debugging**: create dedicated Bug directories for hypotheses, validation steps, logs, and latest conclusions.
+- **Bug knowledge base**: reuse historical debugging conclusions through `bug-index.md` to avoid repeated investigations.
+- **Feature relationship management**: handle parent-child, dependency, cross-cutting, duplicate, and aggregate features.
+- **Bounded memory cost**: read active memory by default, skip memory updates for small edits, and update only the most important 1-3 files per task.
 
 ## Installation
 
-This repository does not contain runtime code and has no dependencies. Import the `feature-memory/` directory from this repository as a skill package into your Code Agent / IDE Agent skills directory.
-
-Common setup:
+This repository does not contain runtime code and has no dependencies.
 
 ```bash
 git clone https://github.com/changjian1994/feature-memory.git
 ```
 
-Then copy or symlink the `feature-memory/feature-memory` directory into your Agent's skills directory. The exact skills directory depends on the Agent you use, so follow your tool's documentation.
+Then copy or symlink the `feature-memory/feature-memory` directory into your Agent's skills directory.
 
-## When To Use
+The exact skills directory depends on the Agent you use, so follow your tool's documentation.
 
-Use this skill on demand. It is not intended to be enabled blindly for every ordinary coding task. It is useful when an Agent is asked to:
+## Quick Start
 
-- Implement or continue a multi-step feature.
-- Recover development context after an interruption.
-- Prepare feature handoff notes.
-- Track design, progress, decisions, or risks.
-- Investigate complex bugs, test failures, production incidents, or flaky behavior.
-- Converge evidence and next validation steps after multiple debugging rounds.
-
-For one-off small edits, formatting changes, simple renames, or low-risk tasks that do not need persistent context, memory documents are usually unnecessary.
-
-## Interactive Entry
-
-Users can simply type:
+In a supported Agent, type:
 
 ```text
 /feature-memory
 ```
 
-The Agent will greet the user and ask what to do next.
-
-If the host Agent supports native pickers, Quick Pick, or question selection components, it should prefer that interactive UI. If not, it falls back to numbered text input:
+The Agent will ask you to choose:
 
 ```text
-Hello, I am feature-memory.
-I can help you recover existing feature context or create memory for a new feature.
-
-Please choose:
 1. Continue an existing feature
 2. Create a new feature
 3. View the current project feature list
 4. Exit
 ```
 
-If the user chooses to continue an existing feature, the Agent first reads the target project's `feature-memory/ai-handoff.md` and `feature-memory/index.md`, prioritizing `ACTIVE` / `VERIFYING` features. After the user selects one, the Agent reads that feature's `handoff.md`, `progress.md`, and when needed `design.md` and `decision.md` to recover context.
+If the host Agent supports native pickers, Quick Pick, or question selection components, it should prefer that UI. Otherwise, it falls back to numbered text input.
 
-If the user chooses to create a new feature, the Agent asks for the feature name, goal, and scope, then initializes the corresponding `feature-memory/<feature-name>/` memory directory.
+## When To Use
 
-## Memory Structure In Target Projects
+Use this skill on demand. It is not intended to be enabled blindly for every ordinary coding task.
 
-The skill asks the Agent to maintain a `feature-memory/` directory at the target project root:
+Good fit:
+
+- Implementing or continuing a multi-step feature.
+- Recovering development context after an interruption.
+- Preparing feature handoff notes.
+- Tracking design, progress, decisions, or risks.
+- Investigating complex bugs, test failures, production incidents, or flaky behavior.
+- Converging evidence and next validation steps after multiple debugging rounds.
+
+Not a fit:
+
+- One-off small edits.
+- Simple renames, formatting, comments, or copy tweaks.
+- Replacing formal product docs, tests, or project management systems.
+- Storing business code, secrets, tokens, cookies, personal data, or raw production logs.
+
+## Target Project Structure
+
+The Agent maintains a `feature-memory/` directory at the target project root:
 
 ```text
 feature-memory/
@@ -135,125 +101,63 @@ feature-memory/
         └── BUG-YYYYMMDD-XXX-description/
 ```
 
-Note: the target project's `feature-memory/` directory is for development memory only. Do not store business code, tests, build artifacts, secrets, tokens, cookies, personal data, internal domains, raw production logs, or unsanitized database content in it.
+Key files:
 
-## Workflow Overview
+- `ai-handoff.md`: project-level first-read entry for new Agents.
+- `index.md`: global feature index with status, relationships, dependencies, and entry links.
+- `bug-index.md`: global knowledge base index for complex Bugs.
+- `<feature-name>/handoff.md`: current handoff view for one feature.
+- `<feature-name>/progress.md`: process history and status changes.
+- `<feature-name>/debug/`: multi-round debugging records for complex Bugs.
+
+## How It Works
+
+In a typical task, the Agent will:
 
 1. Locate `feature-memory/` at the target project root.
-2. If the memory directory does not exist, initialize the minimum project-level document structure.
-3. Read `ai-handoff.md` first, then read `index.md` and target feature documents on demand.
-4. By default, read only `ACTIVE` and `VERIFYING` memory; archived content is read only when a keyword matches or the user asks for it.
-5. Separate verified facts, assumptions, and open questions.
-6. Start implementation, debugging, refactoring, or documentation updates.
-7. Before finishing, update relevant memory documents only when the feature goal, design, status, risk, handoff context, or debug conclusion has changed.
-8. By default, update only the most important 1-3 memory files per task to keep synchronization cost bounded.
+2. Read `ai-handoff.md` first, then `index.md` and target feature documents on demand.
+3. Read only `ACTIVE` and `VERIFYING` memory by default.
+4. Separate verified facts, assumptions, and open questions.
+5. Start implementation, debugging, refactoring, or documentation updates.
+6. Update memory only when important information changes.
+7. Update only the most important 1-3 memory files per task by default.
 
-## Debugging Convention
+## Advanced Capabilities
 
-Complex issues get a dedicated Bug directory under the related feature:
+- **Debug loop**: complex issues can generate `debug.sh`; each round writes `output/vN.log`, the user sends the log back unchanged, and the Agent keeps converging. See [`debug-workflow.md`](feature-memory/references/debug-workflow.md).
+- **Bug knowledge base**: resolved or blocked complex Bugs are registered in `bug-index.md`, so similar future issues can reuse historical conclusions. See [`templates.md`](feature-memory/references/templates.md).
+- **Feature relationship management**: before creating a new feature, the Agent checks existing features to avoid duplicates while keeping features small and independent. See [`feature-relationship.md`](feature-memory/references/feature-relationship.md).
+- **Memory lifecycle**: `ACTIVE`, `VERIFYING`, `ARCHIVED`, and `LEGACY` states control reading scope and archive compaction. See [`memory-lifecycle.md`](feature-memory/references/memory-lifecycle.md).
+- **Privacy and redaction**: do not record secrets, tokens, cookies, personal data, internal domains, raw production logs, or unsanitized database content. See [`privacy.md`](feature-memory/references/privacy.md).
+
+## Repository Structure
 
 ```text
-feature-memory/<feature-name>/debug/BUG-YYYYMMDD-XXX-description/
+.
+├── feature-memory/
+│   ├── SKILL.md
+│   └── references/
+├── CHANGELOG.md
+├── LICENSE
+├── PRIVACY.md
 ├── readme.md
-├── timeline.md
-├── conclusion.md
-├── debug.sh
-└── output/
+└── readme.en.md
 ```
 
-- When the user mentions debugging, investigation, log analysis, test failures, production incidents, flaky issues, or provides `output/vN.log`, error stacks, or alarms, the Agent should enter the debug memory workflow.
-- On the first debugging round for a Bug, the Agent should create the Bug directory and initialize `readme.md`, `timeline.md`, `conclusion.md`, `debug.sh`, and `output/`.
-- Complex debugging should not be recorded only in the feature-level `progress.md`.
-- `debug.sh` is a one-command diagnostic script. Each round should automatically generate the next versioned log file, such as `output/v1.log`, `output/v2.log`, or `output/v3.log`.
-- The user only needs to run `./debug.sh`, then send the generated `output/vN.log` content back to the Agent unchanged.
-- `timeline.md` is append-only and preserves the investigation history.
-- `conclusion.md` keeps only the latest conclusion and clearly separates confirmed facts, excluded hypotheses, and remaining hypotheses.
-- `debug.sh` should default to read-only diagnostic commands; writing, deleting, migrating, restarting services, or modifying databases requires confirmation first.
-- `output/` stores diagnostic outputs from each round so the Agent can continue converging from logs; old logs must not be overwritten.
+- `feature-memory/SKILL.md`: the skill entry file using a Lean Core routing structure.
+- `feature-memory/references/`: detailed rules, templates, and safety guidance loaded on demand.
+- `PRIVACY.md`: user-facing privacy and redaction guidance.
+- `CHANGELOG.md`: version history.
 
-## Bug Knowledge Base Index (`bug-index.md`)
+## Documentation
 
-After each complex Bug is resolved (or blocked/verifying), the Agent must register one record in `feature-memory/bug-index.md`. The value: the next time the Agent encounters the same or similar issue, it first scans `bug-index.md` and reuses the historical conclusion and fix path, avoiding duplicate investigations.
-
-### Registration Fields
-
-- Bug ID: `BUG-YYYYMMDD-XXX-description`
-- Title: one-line summary
-- Root cause category: e.g. `auth/browser-native-request`, `data/tcc-misconfig`
-- Keywords: covering error codes, component names, key behaviors (e.g. `browser, 401, audio, X-Jwt-Token`)
-- Owner feature / status / last update / entry document (pointing to `conclusion.md`)
-
-### Trigger Rules
-
-1. When entering a debug workflow, **must first read** `feature-memory/bug-index.md` to look for similar Bugs
-2. If a match is found, inform the user "similar Bug found" and use the corresponding `conclusion.md` as the starting point
-3. After a Bug ends (RESOLVED / BLOCKED / VERIFYING), **must** update `bug-index.md` with a new record
-4. `conclusion.md` must include a "Memory Index" and "Prerequisite Knowledge" block at the top (see template)
-
-## Feature Relationship Management
-
-When encountering similar, overlapping, parent-child, or cross-cutting features, the skill automatically detects and suggests appropriate handling:
-
-### Relationship Types
-
-- **Parent-child**: One feature is a sub-task of another (e.g., `user-profile-avatar-upload` is part of `user-profile`)
-- **Dependency**: One feature depends on another being completed (e.g., `order-checkout` depends on `payment-gateway`)
-- **Cross-cutting**: Two features share partial implementation or data (e.g., both `cart` and `wishlist` access product data)
-- **Duplicate**: Two features have identical or highly overlapping goals
-
-### Handling Strategy
-
-Following the principle: "Avoid duplicate directories where possible, but don't let a single feature become bloated":
-
-1. **Detect Overlap**: Before creating a new feature, check if name, goal, and scope overlap >60% with existing features
-2. **Prefer Merge**: If highly overlapping (>60%), suggest merging into an existing feature rather than creating a new one
-3. **Independent Split**: If only partially overlapping or involving different modules, create independent small features with low coupling
-4. **Establish Relationships**: Record parent-child or dependency relationships in `index.md` and feature `readme.md`
-5. **Define Boundaries**: Each feature must define "what is included" and "what is excluded"
-6. **Aggregate Navigation**: When creating a large feature, if existing features can serve as its subsets, create an aggregate feature directory with an index tree structure linking to child features
-
-### Aggregate Navigation
-
-When creating a large aggregate feature (e.g., `user-profile`) and existing features like `user-profile-avatar-upload`, `user-profile-settings` can serve as its children:
-
-- Create aggregate feature directory: `feature-memory/user-profile/`
-- List child feature index tree in the aggregate feature's `readme.md`
-- Set parent feature for child features in `index.md`
-- Keep child feature documents in their own directories (no duplication)
-- Aggregate feature can contain cross-child-feature design and coordination
-
-### Boundary Definition
-
-Each feature's `readme.md` should include:
-- **Includes**: Feature scope, core deliverables, key interfaces/modules
-- **Excludes**: Out-of-scope functionality, parts handled by other features, explicitly excluded boundaries
-
-## Memory Convergence And First-Read Entry
-
-To prevent memory itself from becoming a new context burden, target projects should maintain `feature-memory/ai-handoff.md` as the project-level first-read entry.
-
-### Reading Strategy
-
-- A new Agent reads `ai-handoff.md` first, then reads a specific feature's `handoff.md` when needed.
-- `index.md` uses both "work status" and "memory status".
-- Memory states are `ACTIVE`, `VERIFYING`, `ARCHIVED`, and `LEGACY`.
-- The Agent reads only `ACTIVE` and `VERIFYING` memory by default.
-- `ARCHIVED` and `LEGACY` are read only when the user asks, a keyword matches, or the current task depends on historical conclusions.
-
-### Update Strategy
-
-- Small edits do not update memory by default, such as style tweaks, copy changes, formatting, comments, or low-risk single-file fixes.
-- Update memory when APIs, databases, permissions, architecture, production risk, debug conclusions, or handoff context change.
-- By default, update at most 1-3 memory files per task.
-- `progress.md` records process history and status changes; `handoff.md` records the current handoff view. Avoid writing the same conclusion into both.
-- Completed and stable features should be compacted: update the final summary, stop continuously extending `progress.md`, and mark the memory state as `ARCHIVED`.
-
-## Scope
-
-- Good fit: long-running features, complex debugging, multi-Agent handoff, context recovery, and architecture decision records.
-- Not a fit: ordinary one-off small tasks, replacing formal product docs, replacing tests, storing sensitive data, or storing business code.
-- Git policy: whether the target project's `feature-memory/` should be committed depends on the project; for public repositories or sensitive content, do not commit it unless reviewed and sanitized.
-- Privacy rules: read `PRIVACY.md` before writing architecture, API, database, or log details.
+- [中文 README](readme.md)
+- [Changelog](CHANGELOG.md)
+- [Privacy](PRIVACY.md)
+- [Debug workflow](feature-memory/references/debug-workflow.md)
+- [Feature relationship](feature-memory/references/feature-relationship.md)
+- [Memory lifecycle](feature-memory/references/memory-lifecycle.md)
+- [Templates](feature-memory/references/templates.md)
 
 ## Contributing
 
@@ -263,4 +167,4 @@ You can also send bug reports or suggestions to: `changjian1994@sina.com`.
 
 ## License
 
-This project is licensed under the MIT License. See `LICENSE` for details.
+This project is licensed under the MIT License. See [`LICENSE`](LICENSE) for details.

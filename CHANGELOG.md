@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.5.1 - 2026-06-10
+
+### Changed
+
+- Simplified Chinese and English README files to focus on user-facing value, installation, quick start, usage scenarios, and documentation links.
+- Moved detailed operational rules out of the main README narrative and kept references as the source of truth for debug, feature relationships, memory lifecycle, templates, and privacy.
+
 ## 1.5.0 - 2026-06-10
 
 ### Added
