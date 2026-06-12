@@ -130,10 +130,22 @@ feature-memory/
 - **记忆生命周期**：通过 `ACTIVE`、`VERIFYING`、`ARCHIVED`、`LEGACY` 控制读取范围和归档节奏。详见 [`memory-lifecycle.md`](feature-memory/references/memory-lifecycle.md)。
 - **隐私与脱敏**：禁止记录密钥、Token、Cookie、个人数据、内部域名、生产日志原文或未脱敏数据库内容。详见 [`privacy.md`](feature-memory/references/privacy.md)。
 
+## 示例
+
+如果你想快速理解这个 skill 在真实研发场景中的价值，可以阅读中文示例 [`examples/call-management-zh`](examples/call-management-zh/) 或英文示例 [`examples/call-management`](examples/call-management/)。
+
+这个示例基于一个脱敏后的“通话管理”功能，展示了：
+
+- 新 Agent 如何从 `ai-handoff.md` 快速接手。
+- 一个长期 feature 如何拆分 `handoff.md`、`progress.md`、`decision.md`。
+- 一次录音播放问题如何通过 `bug-index.md` 和 debug 结论沉淀为可复用经验。
+- 如何在记录上下文的同时避免保存密钥、生产日志和敏感数据。
+
 ## 仓库结构
 
 ```text
 .
+├── examples/
 ├── feature-memory/
 │   ├── SKILL.md
 │   └── references/
@@ -144,6 +156,7 @@ feature-memory/
 └── readme.en.md
 ```
 
+- `examples/`：脱敏后的正式示例，用于展示完整 feature-memory 工作流。
 - `feature-memory/SKILL.md`：skill 入口文件，采用 Lean Core 路由结构。
 - `feature-memory/references/`：按需读取的详细规则、模板和安全说明。
 - `PRIVACY.md`：面向用户的隐私和脱敏说明。
@@ -152,6 +165,8 @@ feature-memory/
 ## 文档
 
 - [English README](readme.en.md)
+- [中文示例：通话管理](examples/call-management-zh/)
+- [Example: Call Management](examples/call-management/)
 - [Changelog](CHANGELOG.md)
 - [Privacy](PRIVACY.md)
 - [Debug workflow](feature-memory/references/debug-workflow.md)

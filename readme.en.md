@@ -130,10 +130,22 @@ In a typical task, the Agent will:
 - **Memory lifecycle**: `ACTIVE`, `VERIFYING`, `ARCHIVED`, and `LEGACY` states control reading scope and archive compaction. See [`memory-lifecycle.md`](feature-memory/references/memory-lifecycle.md).
 - **Privacy and redaction**: do not record secrets, tokens, cookies, personal data, internal domains, raw production logs, or unsanitized database content. See [`privacy.md`](feature-memory/references/privacy.md).
 
+## Example
+
+To quickly understand the value of this skill in a realistic engineering workflow, read the English example [`examples/call-management`](examples/call-management/) or the Chinese example [`examples/call-management-zh`](examples/call-management-zh/).
+
+This sanitized call-management example shows:
+
+- How a new Agent starts from `ai-handoff.md`.
+- How a long-running feature separates `handoff.md`, `progress.md`, and `decision.md`.
+- How a recording playback issue becomes reusable knowledge through `bug-index.md` and a debug conclusion.
+- How to preserve useful context without storing secrets, production logs, or sensitive data.
+
 ## Repository Structure
 
 ```text
 .
+├── examples/
 ├── feature-memory/
 │   ├── SKILL.md
 │   └── references/
@@ -144,6 +156,7 @@ In a typical task, the Agent will:
 └── readme.en.md
 ```
 
+- `examples/`: sanitized examples that demonstrate the complete feature-memory workflow.
 - `feature-memory/SKILL.md`: the skill entry file using a Lean Core routing structure.
 - `feature-memory/references/`: detailed rules, templates, and safety guidance loaded on demand.
 - `PRIVACY.md`: user-facing privacy and redaction guidance.
@@ -152,6 +165,8 @@ In a typical task, the Agent will:
 ## Documentation
 
 - [中文 README](readme.md)
+- [Example: Call Management](examples/call-management/)
+- [中文示例：通话管理](examples/call-management-zh/)
 - [Changelog](CHANGELOG.md)
 - [Privacy](PRIVACY.md)
 - [Debug workflow](feature-memory/references/debug-workflow.md)

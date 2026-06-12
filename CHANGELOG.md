@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.5.2 - 2026-06-10
+
+### Added
+
+- Added `examples/call-management/`, a sanitized end-to-end example that demonstrates project-level handoff, feature state, decisions, progress history, Bug indexing, and reusable debug conclusions.
+- Added `examples/call-management-zh/`, the Chinese version of the call-management example with the same end-to-end structure.
+- Linked the examples from both Chinese and English README files.
+
 ## 1.5.1 - 2026-06-10
 
 ### Changed
